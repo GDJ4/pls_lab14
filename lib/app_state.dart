@@ -11,10 +11,12 @@ class AppState extends ChangeNotifier {
   AppState({
     CalorieStorage? storage,
     this.useSeedDishes = true,
+    this.supabaseEnabled = true,
   }) : _storage = storage ?? CalorieStorage();
 
   final CalorieStorage _storage;
   final bool useSeedDishes;
+  final bool supabaseEnabled;
   bool _ready = false;
   String? _currentUserId;
   List<Dish> _localDishes = [];
@@ -39,7 +41,10 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> init({String? userId}) async {
-    await switchUser(userId ?? SupabaseService.currentSession?.user.id);
+    final sessionUser = supabaseEnabled && SupabaseService.isEnabled
+        ? SupabaseService.currentSession?.user.id
+        : null;
+    await switchUser(userId ?? sessionUser);
   }
 
   Future<void> switchUser(String? userId) async {
@@ -53,7 +58,8 @@ class AppState extends ChangeNotifier {
     _localDishes = [...loaded.localDishes];
     _logs.addAll(loaded.logs);
 
-    if (SupabaseService.isEnabled) {
+    final useRemote = supabaseEnabled && SupabaseService.isEnabled;
+    if (useRemote) {
       try {
         _publicDishes = await SupabaseService.fetchPublicDishes();
       } catch (_) {
@@ -131,7 +137,7 @@ class AppState extends ChangeNotifier {
     if (_currentUserId != null) {
       unawaited(SupabaseService.upsertPrivateDish(_currentUserId!, updatedDish));
     }
-    if (updatedDish.isPublished) {
+    if (updatedDish.isPublished && supabaseEnabled && SupabaseService.isEnabled) {
       unawaited(SupabaseService.publishDish(updatedDish));
     }
     notifyListeners();
@@ -147,7 +153,9 @@ class AppState extends ChangeNotifier {
     if (_currentUserId != null) {
       unawaited(SupabaseService.upsertPrivateDish(_currentUserId!, dish));
     }
-    unawaited(SupabaseService.publishDish(dish));
+    if (supabaseEnabled && SupabaseService.isEnabled) {
+      unawaited(SupabaseService.publishDish(dish));
+    }
     notifyListeners();
   }
 
@@ -179,7 +187,9 @@ class AppState extends ChangeNotifier {
       final local = dishById(dishId);
       if (local != null) {
         _upsertPublic(local.copyWith(isPublished: true));
-        unawaited(SupabaseService.publishDish(local.copyWith(isPublished: true)));
+        if (supabaseEnabled && SupabaseService.isEnabled) {
+          unawaited(SupabaseService.publishDish(local.copyWith(isPublished: true)));
+        }
       }
     } else {
       _publicDishes.removeWhere((dish) => dish.id == dishId);
@@ -199,7 +209,9 @@ class AppState extends ChangeNotifier {
     log.entries[meal]?.add(entry);
     _incrementUsage(dish.id);
     unawaited(_persist());
-    unawaited(SupabaseService.incrementUsage(dish.id));
+    if (supabaseEnabled && SupabaseService.isEnabled) {
+      unawaited(SupabaseService.incrementUsage(dish.id));
+    }
     if (_currentUserId != null) {
       unawaited(SupabaseService.upsertPrivateLog(_currentUserId!, log));
     }

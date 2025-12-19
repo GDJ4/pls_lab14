@@ -10,7 +10,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('DishPickerSheet highlights popular items and search', (tester) async {
-    final state = AppState(storage: FakeStorage());
+    final state = AppState(
+      storage: FakeStorage(),
+      supabaseEnabled: false,
+    );
     await state.init();
 
     await tester.pumpWidget(

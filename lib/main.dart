@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app_state.dart';
-import 'config.dart';
 import 'models.dart';
 import 'supabase_service.dart';
 
@@ -272,9 +271,9 @@ class _AuthScreenState extends State<AuthScreen> {
 class AppStateScope extends InheritedNotifier<AppState> {
   const AppStateScope({
     required AppState state,
-    required Widget child,
+    required super.child,
     super.key,
-  }) : super(notifier: state, child: child);
+  }) : super(notifier: state);
 
   static AppState of(BuildContext context) {
     final scope =
@@ -564,7 +563,7 @@ class _StatChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      avatar: CircleAvatar(backgroundColor: color.withOpacity(0.2)),
+      avatar: CircleAvatar(backgroundColor: color.withValues(alpha: 0.2)),
       label: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -661,6 +660,7 @@ class _MealSection extends StatelessWidget {
   Future<void> _openPicker(BuildContext context, AppState state) async {
     final dish = await showDishPicker(context, state: state);
     if (dish == null) return;
+    if (!context.mounted) return;
 
     final portion = await showDialog<double>(
       context: context,
@@ -1054,6 +1054,7 @@ class DishDetailsSheet extends StatelessWidget {
               onPressed: () async {
                 final meal = await _pickMeal(context);
                 if (meal == null) return;
+                if (!context.mounted) return;
                 final portion = await _pickPortion(context);
                 if (portion == null) return;
                 state.addEntry(dateOnly(DateTime.now()), meal, dish, portion);
@@ -1238,7 +1239,7 @@ class _DishPickerSheetState extends State<DishPickerSheet> {
                 ? const Center(child: Text('Ничего не найдено'))
                 : ListView.separated(
                     itemCount: results.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    separatorBuilder: (context, index) => const Divider(height: 1),
                     itemBuilder: (context, index) {
                       final dish = results[index];
                       final suspicious = dish.calories > 3000;

@@ -9,7 +9,11 @@ void main() {
 
   test('summary counts macros for the day', () async {
     final storage = FakeStorage();
-    final state = AppState(storage: storage, useSeedDishes: false);
+    final state = AppState(
+      storage: storage,
+      useSeedDishes: false,
+      supabaseEnabled: false,
+    );
     await state.init();
 
     final dish = Dish(
@@ -33,7 +37,11 @@ void main() {
 
   test('popular sorting demotes absurd calories', () async {
     final storage = FakeStorage();
-    final state = AppState(storage: storage, useSeedDishes: false);
+    final state = AppState(
+      storage: storage,
+      useSeedDishes: false,
+      supabaseEnabled: false,
+    );
     await state.init();
 
     final normal = Dish(
@@ -63,7 +71,11 @@ void main() {
 
   test('togglePublication keeps dish locally but hides from каталог', () async {
     final storage = FakeStorage();
-    final state = AppState(storage: storage, useSeedDishes: false);
+    final state = AppState(
+      storage: storage,
+      useSeedDishes: false,
+      supabaseEnabled: false,
+    );
     await state.init();
 
     final dish = Dish(
