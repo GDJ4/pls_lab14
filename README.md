@@ -1,4 +1,8 @@
-# Счётчик калорий — отчёт по ПЗ №14
+# Отчёт по практическому занятию №14
+
+## Выполнил: Лазарев Г.С.
+
+## Группа: ЭФБО-10-23
 
 ## Цели
 - Реализовать дневник калорий по приёмам пищи (завтрак/обед/ужин/перекус) с БЖУ.
@@ -74,27 +78,23 @@ begin update public_dishes set usage_count = usage_count + 1 where id = dish_id;
 3) Storage: bucket `dish_photos` — публичное чтение, запись для authenticated.  
 4) Auth: email+password, подтвердить email после регистрации (приложение покажет подсказку).
 
-## Команды для проверки
-- Получить зависимости: `flutter pub get`
-- Линт: `flutter analyze`
-- Тесты: `flutter test --coverage`
-- (Опционально) сборка iOS/Android: `flutter build ios` / `flutter build apk`
-- (По заданию) профилирование: `flutter run --profile` + DevTools Performance/Memory; анализ размера: `flutter build apk --release --analyze-size`
-
-## Что снять/добавить в отчёт (по заданию)
-- Скрины `flutter analyze` и `flutter test` (покрытие % из `coverage/lcov.info`).
-- Скрины DevTools/Overlay до/после оптимизаций (скролл списка, добавление блюда).
-- Табличку «Оптимизация → Зачем → Как → Эффект» (например: const/вынос поддеревьев, сортировка builder, кэш фото, разгрузка списков).
-- Скрин отчёта Analyze Size и меры снижения (split-per-abi, tree-shake icons и т.п.).
-- Скрин экрана ошибки (у нас есть глобальный перехват через MaterialApp — можно дополнить кастомный ErrorWidget при желании).
-
 ## Краткие инструкции по функционалу
 - Вкладка «День»: выбрать дату, добавить блюдо в приём, итоги БЖУ по дню.
 - Вкладка «Блюда»: мои блюда (переключатель публикации), каталог пользователей с сортировкой по популярности/адекватности, детальная карточка с описанием и кнопкой «Добавить в дневник».
 - Публикация требует фото; при входе через Supabase данные дневника/блюд привязаны к аккаунту.
 
-## Осталось сделать вручную
-- Внести реальные метрики (анализ, тесты, профилирование, размер) в отчёт и приложить скриншоты.
-- При необходимости добавить описание/рецепты в существующие блюда, обновить сиды.
+## Команды для проверки
+- Линт: `flutter analyze`
+<img width="1437" height="267" alt="2025-12-19_03-24-56" src="https://github.com/user-attachments/assets/f72769de-7d68-4e08-bd32-2946ef73a6b3" />
+<img width="387" height="37" alt="2025-12-19_03-30-38" src="https://github.com/user-attachments/assets/95a61a72-3462-4fcd-99ec-ab4ac973676f" />
 
-# pls_lab14
+- Тесты: `flutter test --coverage`
+<img width="1442" height="171" alt="2025-12-19_03-30-28" src="https://github.com/user-attachments/assets/360382fd-a4b0-4eea-a634-6372a83e71f1" />
+<img width="387" height="37" alt="2025-12-19_03-30-38" src="https://github.com/user-attachments/assets/852b283a-0d32-4d97-a0dd-628d13abc906" />
+
+- Сборка android: `flutter build apk`
+<img width="471" height="111" alt="image" src="https://github.com/user-attachments/assets/4dc4b915-3b2f-4d43-be17-5fc6f5d98cfd" />
+
+- Анализ размера: `flutter build apk --release --analyze-size`
+<img width="892" height="422" alt="2025-12-19_03-38-49" src="https://github.com/user-attachments/assets/8ec5d09b-4843-4e54-8f8a-c3273f9df9da" />
+
